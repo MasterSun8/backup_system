@@ -1,45 +1,62 @@
 const fs = require('fs-extra');
+const AdmZip = require("adm-zip");
 
-const src = `./test`;
-const dest = `./testTarget`;
+const outputFile = dest+`\\backup.zip`;
 
-function writeDate(date){
-    if (date instanceof Date) {
-        let x = date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear()
-        return x
-    }else{
-        return console.log('not a date')
+async function createZipArchive() {
+    try {
+        const zip = new AdmZip();
+        zip.addLocalFolder(dest);
+        zip.writeZip(outputFile);
+        console.log(`Created ${outputFile} successfully`);
+    } catch (e) {
+        console.log(`Something went wrong. ${e}`);
     }
 }
 
-function isNotToday(date){
+function isTodayDate(date, range='d'){
+    let x = new Date()
+    date = new Date(date)
     if (date instanceof Date) {
-        let x = date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear()
-        return x
+        if(x.getFullYear() > date.getFullYear()){
+            return false
+        }else if(x.getMonth() > date.getMonth()){
+            return false
+        }else if(x.getDate() > date.getDate()){
+            if(range=='m'){
+                return true
+            }else{
+                return false
+            }
+        }else{
+            return true
+        }
     }else{
-        return console.log('not a date')
+        console.log('not a date')
+        return false
     }
 }
 
-fs.readdir(src, (err, files) => {
-    if (err) return console.log(err)
-    files.forEach(x => {
-        fs.stat((src+'/'+x), (err, stats) => {
-            if(err) return console.log(err)
-            console.log(x + ` Data Last Modified: ${writeDate(stats.mtime)}`);
-            console.log(x + ` Status Last Modified: ${writeDate(stats.ctime)}`);
-        })
-    })
-})
+const src = process.cwd();
+const dest = `F:\\temp`;
 
-/*const dir = fs.readdirSync(src).filter(file => {
-    fs.stat((src+'/'+x), (err, stats) => {
-        if(err) return console.log(err)
-        return stats.ctime
-    })
-})
+fs.removeSync(dest+'\\'+`backup.zip`)
 
-fs.copy(src, dest, err => {
-    if (err) return console.error(err)
-    console.log('success!')
-})*/
+const filterFunc = (source, destination) => {
+    let y = fs.statSync((outputFile))
+    return !(isTodayDate(y.ctime, 'm'))
+}
+
+fs.copySync(src, dest, { filter: filterFunc })
+
+let sr = fs.readdirSync(src)
+let files = fs.readdirSync(dest)
+
+console.log(sr)
+console.log(files)
+
+createZipArchive()
+
+files.forEach(x => {
+        fs.removeSync(dest+'\\'+x)
+})
