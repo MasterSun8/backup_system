@@ -1,16 +1,16 @@
-const fs = require('fs-extra');
-const AdmZip = require("adm-zip");
+const fs = require('fs-extra')
+const AdmZip = require("adm-zip")
 
-const outputFile = dest+`\\backup.zip`;
+const outputFile = dest+`\\backup.zip`
 
 async function createZipArchive() {
     try {
-        const zip = new AdmZip();
-        zip.addLocalFolder(dest);
-        zip.writeZip(outputFile);
-        console.log(`Created ${outputFile} successfully`);
+        const zip = new AdmZip()
+        zip.addLocalFolder(dest)
+        zip.writeZip(outputFile)
+        console.log(`Created ${outputFile} successfully`)
     } catch (e) {
-        console.log(`Something went wrong. ${e}`);
+        console.log(`Something went wrong. ${e}`)
     }
 }
 
@@ -37,8 +37,8 @@ function isTodayDate(date, range='d'){
     }
 }
 
-const src = process.cwd();
-const dest = `F:\\temp`;
+const src = process.cwd()
+const dest = `F:\\temp`
 
 fs.removeSync(dest+'\\'+`backup.zip`)
 
@@ -58,5 +58,5 @@ console.log(files)
 createZipArchive()
 
 files.forEach(x => {
-        fs.removeSync(dest+'\\'+x)
+    fs.removeSync(dest+'\\'+x)
 })
