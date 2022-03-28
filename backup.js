@@ -63,7 +63,6 @@ try{
     fs.copySync(src, dest)//, { filter: filterFunc })
 }catch (error) {
     console.error(error)
-    copyToTemp()
 }
 
 let sr = fs.readdirSync(src)
