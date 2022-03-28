@@ -1,21 +1,31 @@
 const fs = require('fs-extra')
 const AdmZip = require("adm-zip")
 
-const src = `/etc`
+const etc = `/etc`
+const home = `/home`
+const db = `/db`
+
 const dest = `/tmp/tempbackup`
 const backup = `/backup`
-var createZip = true
+
 const today = new Date()
 
-const outputFile = backup + `/etc` + todayDate('m') + `.zip`
-
-console.log(outputFile)
+const etcFile = backup + `/etc` + todayDate('m') + `.zip`
+const homeFile = backup + `/home` + todayDate('w') + `.zip`
+const dbFile = backup + `/db` + todayDate() + `.zip`
 
 function todayDate(range='d'){
+    let y = '-'
     if(today instanceof Date){
-        let x = today.getFullYear() + '-' + today.getMonth()
-        if(range == 'd'){
-            x += '-' + today.getDate()
+        if(today.getMonth() < 10) y += '0'
+        let x = today.getFullYear() + y + today.getMonth()
+        switch (range) {
+            case 'd':
+                x += '-' + today.getDate()
+                break
+            case 'w':
+                x += '-w' + today.getWeek()
+                break
         }
         return x
     }
@@ -26,10 +36,10 @@ async function createZipArchive() {
     try {
         const zip = new AdmZip()
         zip.addLocalFolder(dest)
-        zip.writeZip(outputFile)
-        console.log(`Created ${outputFile} successfully`)
+        zip.writeZip(etcFile)
+        console.log(`Created ${etcFile} successfully`)
     } catch (error) {
-        console.error(error)
+        //console.error(error)
     }
 }
 
@@ -56,26 +66,74 @@ function isTodayDate(date, range='d'){
     }
 }
 
+function isSameWeek(date){
+    date = new Date(date)
+}
+
+function isSameDay(){
+
+}
+
+function isSameMonth(){
+
+}
+
+let back = fs.readdirSync(backup)
+
 const filterFuncMonth = (source, destination) => {
-    let y = fs.statSync((outputFile))
-    return !(isTodayDate(y.ctime, 'm'))
+    let y = fs.statSync((source))
+    return isSameMonth(y.ctime, 'm')
+}
+const filterFuncWeek = (source, destination) => {
+    let y = fs.statSync((source))
+    return isSameWeek(y.ctime, 'm')
+}
+const filterFuncDay = (source, destination) => {
+    let y = fs.statSync((source))
+    return isSameDay(y.ctime, 'm')
 }
 
 try{
-    fs.copySync(src, dest)//, { filter: filterFunc })
+    fs.copySync(etc, dest, { filter: filterFuncMonth})
 }catch (error) {
-    console.error(error)
+    //console.error(error)
 }
 
-let sr = fs.readdirSync(src)
-let back = fs.readdirSync(backup)
+try{
+    fs.copySync(home, dest, { filter: filterFuncWeek})
+}catch (error) {
+    //console.error(error)
+}
+
+try{
+    fs.copySync(db, dest, { filter: filterFuncDay})
+}catch (error) {
+    //console.error(error)
+}
+
+let sr = fs.readdirSync(etc)
 let files = fs.readdirSync(dest)
 
 console.log(sr)
 console.log(files)
 console.log(back)
 
-if(back.includes(outputFile)){createZipArchive()}else{console.log("no need for another backup")}
+if(back.includes(etcFile)){
+    createZipArchive()}
+else{
+    console.log("no need for another backup")
+}
+
+if(back.includes(homeFile)){
+    createZipArchive()}
+else{
+    console.log("no need for another backup")
+}
+
+if(back.includes(dbFile)){createZipArchive()
+}else{
+    console.log("no need for another backup")
+}
 
 files.forEach(x => {
     fs.removeSync(dest+'\\'+x)
