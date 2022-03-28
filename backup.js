@@ -2,7 +2,7 @@ const fs = require('fs-extra')
 const AdmZip = require("adm-zip")
 
 const src = `/etc`
-const dest = `/temp`
+const dest = `/tmp`
 
 const today = new Date()
 
