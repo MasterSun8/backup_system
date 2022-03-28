@@ -38,7 +38,7 @@ function isTodayDate(date, range='d'){
 }
 
 const src = process.cwd()
-const dest = `F:\\temp`
+const dest = `/etc `
 
 fs.removeSync(dest+'\\'+`backup.zip`)
 
