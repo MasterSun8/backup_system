@@ -3,10 +3,11 @@ const AdmZip = require("adm-zip")
 
 const src = `/etc`
 const dest = `/tmp/tempbackup`
+const backup = `/backup`
 
 const today = new Date()
 
-const outputFile = `/backup/etc` + todayDate('m') + `.zip`
+const outputFile = backup + `/etc` + todayDate('m') + `.zip`
 
 console.log(outputFile)
 
@@ -55,7 +56,7 @@ function isTodayDate(date, range='d'){
     }
 }
 
-const filterFunc = (source, destination) => {
+const filterFuncMonth = (source, destination) => {
     let y = fs.statSync((outputFile))
     return !(isTodayDate(y.ctime, 'm'))
 }
@@ -67,10 +68,12 @@ try{
 }
 
 let sr = fs.readdirSync(src)
+let back = fs.readdirSync(backup)
 let files = fs.readdirSync(dest)
 
 console.log(sr)
 console.log(files)
+console.log(back)
 
 createZipArchive()
 
