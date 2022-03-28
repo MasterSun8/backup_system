@@ -1,5 +1,1 @@
-z zainstalowanym nodeJS:
-w bashu wpisujemy komendę
-crontab -e
-a następnie w ostatniej linii wpisujemy ścieżkę do skryptu
-@reboot ścieżka/do/folderu/backup_system/backup.sh
+z zainstalowanym nodeJS odpalamy plik autorun.sh, skończone.
