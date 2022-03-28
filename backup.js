@@ -1,12 +1,11 @@
 const fs = require('fs-extra')
-const child_process = require("child_process")
 
 const src = `/etc`
-const dest = `/tmp//tempbackup`
+const dest = `/tmp/tempbackup`
 
 const today = new Date()
 
-const outputFile = `/tmp/backup/etc` + todayDate('m') + `.zip`
+const outputFile = `/backup/etc` + todayDate('m') + `.zip`
 
 console.log(outputFile)
 
@@ -19,6 +18,17 @@ function todayDate(range='d'){
         return x
     }
     return ''
+}
+
+async function createZipArchive() {
+    try {
+        const zip = new AdmZip()
+        zip.addLocalFolder(dest)
+        zip.writeZip(outputFile)
+        console.log(`Created ${outputFile} successfully`)
+    } catch (e) {
+        console.error(`Something went wrong. ${e}`)
+    }
 }
 
 function isTodayDate(date, range='d'){
@@ -49,13 +59,12 @@ const filterFunc = (source, destination) => {
     return !(isTodayDate(y.ctime, 'm'))
 }
 
-function copyToTemp(){
 try{
     fs.copySync(src, dest)//, { filter: filterFunc })
 }catch (error) {
     console.error(error)
     copyToTemp()
-}}
+}
 
 let sr = fs.readdirSync(src)
 let files = fs.readdirSync(dest)
@@ -63,9 +72,7 @@ let files = fs.readdirSync(dest)
 console.log(sr)
 console.log(files)
 
-child_process.execSync((`zip -r ` + outputFile + ` *`), {
-    cwd: dest
-})
+createZipArchive()
 
 files.forEach(x => {
     fs.removeSync(dest+'\\'+x)
