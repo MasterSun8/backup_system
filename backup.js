@@ -124,19 +124,19 @@ console.log(sr)
 console.log(files)
 console.log(back)
 
-if(back.includes(etcFile)){
+if(!(back.includes(etcFile))){
     createZipArchive()}
 else{
     console.log("no need for another backup")
 }
 
-if(back.includes(homeFile)){
+if(!(back.includes(homeFile))){
     createZipArchive()}
 else{
     console.log("no need for another backup")
 }
 
-if(back.includes(dbFile)){createZipArchive()
+if(!(back.includes(dbFile))){createZipArchive()
 }else{
     console.log("no need for another backup")
 }
