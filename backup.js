@@ -5,8 +5,11 @@ const src = `/etc`
 const dest = `/temp`
 
 const today = new Date()
-fs.ensureDir(`/backup`)
+
+fs.ensureDirSync(`/backup`)
+
 const outputFile = `/backup/etc` + todayDate('m') + `.zip`
+
 console.log(outputFile)
 
 function todayDate(range='d'){
