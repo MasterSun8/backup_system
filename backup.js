@@ -27,8 +27,8 @@ async function createZipArchive() {
         zip.addLocalFolder(dest)
         zip.writeZip(outputFile)
         console.log(`Created ${outputFile} successfully`)
-    } catch (e) {
-        console.error(`Something went wrong. ${e}`)
+    } catch (error) {
+        console.error(error)
     }
 }
 
