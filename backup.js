@@ -4,7 +4,7 @@ const AdmZip = require("adm-zip")
 const src = `/etc`
 const dest = `/tmp/tempbackup`
 const backup = `/backup`
-
+var createZip = true
 const today = new Date()
 
 const outputFile = backup + `/etc` + todayDate('m') + `.zip`
@@ -75,7 +75,7 @@ console.log(sr)
 console.log(files)
 console.log(back)
 
-createZipArchive()
+if(back.includes(outputFile)){createZipArchive()}else{console.log("no need for another backup")}
 
 files.forEach(x => {
     fs.removeSync(dest+'\\'+x)
