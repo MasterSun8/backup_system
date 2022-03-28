@@ -49,7 +49,11 @@ const filterFunc = (source, destination) => {
     return !(isTodayDate(y.ctime, 'm'))
 }
 
-fs.copySync(src, dest)//, { filter: filterFunc })
+try{
+    fs.copySync(src, dest)//, { filter: filterFunc })
+}catch (error) {
+    console.error(error)
+}
 
 let sr = fs.readdirSync(src)
 let files = fs.readdirSync(dest)
