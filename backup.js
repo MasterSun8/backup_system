@@ -1,7 +1,23 @@
 const fs = require('fs-extra')
 const AdmZip = require("adm-zip")
 
-const outputFile = dest+`\\backup.zip`
+const src = `/etc`
+const dest = `/temp`
+
+const today = new Date()
+const outputFile = `/backup/etc` + todayDate('m') + `.zip`
+console.log(outputFile)
+
+function todayDate(range='d'){
+    if(today instanceof Date){
+        let x = today.getFullYear() + '-' + today.getMonth()
+        if(range == 'd'){
+            x += '-' + today.getDate()
+        }
+        return x
+    }
+    return ''
+}
 
 async function createZipArchive() {
     try {
@@ -15,7 +31,7 @@ async function createZipArchive() {
 }
 
 function isTodayDate(date, range='d'){
-    let x = new Date()
+    let x = today
     date = new Date(date)
     if (date instanceof Date) {
         if(x.getFullYear() > date.getFullYear()){
@@ -23,7 +39,7 @@ function isTodayDate(date, range='d'){
         }else if(x.getMonth() > date.getMonth()){
             return false
         }else if(x.getDate() > date.getDate()){
-            if(range=='m'){
+            if(range!='d'){
                 return true
             }else{
                 return false
@@ -36,11 +52,6 @@ function isTodayDate(date, range='d'){
         return false
     }
 }
-
-const src = process.cwd()
-const dest = `/etc`
-
-fs.removeSync(dest+'\\'+`backup.zip`)
 
 const filterFunc = (source, destination) => {
     let y = fs.statSync((outputFile))
