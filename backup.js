@@ -6,7 +6,7 @@ const dest = `/temp`
 
 const today = new Date()
 
-fs.ensureDirSync(`/backup`)
+fs.ensureDirSync(`/backup/`)
 
 const outputFile = `/backup/etc` + todayDate('m') + `.zip`
 
