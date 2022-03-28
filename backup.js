@@ -14,8 +14,8 @@ const etcFile = backup + `/etc` + todayDate('m') + `.zip`
 const homeFile = backup + `/home` + todayDate('w') + `.zip`
 const dbFile = backup + `/db` + todayDate() + `.zip`
 
-Date.prototype.getWeek = function() {
-    var onejan = new Date(this.getFullYear(),0,1);
+function getWeek(date) {
+    var onejan = new Date(date.getFullYear(),0,1);
     var millisecsInDay = 86400000;
     return Math.ceil((((this - onejan) /millisecsInDay) + onejan.getDay()+1)/7);
 };
@@ -30,7 +30,7 @@ function todayDate(range='d'){
                 x += '-' + today.getDate()
                 break
             case 'w':
-                x += '-w' + today.getWeek()
+                x += '-w' + getWeek(today)
                 break
         }
         return x
