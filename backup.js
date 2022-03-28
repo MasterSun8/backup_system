@@ -1,12 +1,12 @@
 const fs = require('fs-extra')
 const child_process = require("child_process")
 
-const src = `F://anime`
-const dest = `F://tmp//tempbackup`
+const src = `/etc`
+const dest = `/tmp//tempbackup`
 
 const today = new Date()
 
-const outputFile = `F://tmp//backup//etc` + todayDate('m') + `.zip`
+const outputFile = `/tmp/backup/etc` + todayDate('m') + `.zip`
 
 console.log(outputFile)
 
