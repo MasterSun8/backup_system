@@ -14,13 +14,13 @@ const dbDest = dest + db
 var logger = fs.createWriteStream('/var/log/kopiaZapasowa.txt', {flags: 'a'})
 var writeLine = (line) => logger.write(`${line}\n`);
 
-const etcZip = `/etc` + todayDate('m') + `.zip`
-const homeZip = `/home` + todayDate('w') + `.zip`
-const dbZip = `/db` + todayDate() + `.zip`
+const etcZip = `etc` + todayDate('m') + `.zip`
+const homeZip = `home` + todayDate('w') + `.zip`
+const dbZip = `db` + todayDate() + `.zip`
 
-const etcFile = backup + etcZip
-const homeFile = backup + homeZip
-const dbFile = backup + dbZip
+const etcFile = backup + '/' + etcZip
+const homeFile = backup + '/' +  homeZip
+const dbFile = backup + '/' +  dbZip
 
 let len = 0
 
