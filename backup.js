@@ -9,7 +9,7 @@ const dest = `/tmp/tempbackup`
 const backup = `/backup`
 
 var logger = fs.createWriteStream('/var/log/kopiaZapasowa.txt', {flags: 'a'})
-var writeLine = (line) => logger.write(`\n${line}`);
+var writeLine = (line) => logger.write(`${line}\n`);
 
 const etcFile = backup + `/etc` + todayDate('m') + `.zip`
 const homeFile = backup + `/home` + todayDate('w') + `.zip`
