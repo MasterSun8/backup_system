@@ -50,7 +50,7 @@ function createZipArchive(file, destination) {
         child_process.execSync(`zip -r ${file} *`, {
             cwd: destination
         })
-        len = fs.readdirSync(dest).length
+        len = fs.readdirSync(destination).length
         writeLine(`Created ${file} successfully with ${len} files on ${todayDate()}`)
     } catch (error) {
         writeLine(error)
@@ -86,7 +86,7 @@ const filterFuncDay = (source, destination) => {
 }
 
 try{
-    fs.copySync(etc, dest, { filter: filterFuncMonth})
+    fs.copySync(etc, etcDest, { filter: filterFuncMonth})
 }catch (error) {
     writeLine("access to some files in etc denied: " + todayDate())
 }
@@ -108,7 +108,7 @@ files.forEach(x => {
 })
 
 try{
-    fs.copySync(home, dest, { filter: filterFuncWeek})
+    fs.copySync(home, homeDest, { filter: filterFuncWeek})
 }catch (error) {
     writeLine("access to some files in home denied: "  + todayDate())
 }
@@ -130,7 +130,7 @@ files.forEach(x => {
 })
 
 try{
-    fs.copySync(db, dest, { filter: filterFuncDay})
+    fs.copySync(db, dbDest, { filter: filterFuncDay})
 }catch (error) {
     writeLine("access to db denied: "  + todayDate())
 }
