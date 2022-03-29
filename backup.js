@@ -25,6 +25,7 @@ const dbFile = backup + dbZip
 let len = 0
 
 let back = fs.readdirSync(backup)
+console.table(back)
 
 function getWeek(d) {
     d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()))
@@ -97,6 +98,7 @@ try{
 }
 
 if(back.includes(etcZip)){
+    console.log(etcZip + etcFile)
     createZipArchive(etcFile, etcDest)
 }else{
     writeLine("no need for another etc backup: " + todayDate())
@@ -109,6 +111,7 @@ try{
 }
 
 if(back.includes(homeZip)){
+    console.log(homeZip + homeFile)
     createZipArchive(homeFile, homeDest)
 }else{
     writeLine("no need for another home backup: "  + todayDate())
@@ -121,6 +124,7 @@ try{
 }
 
 if(back.includes(dbZip)){
+    console.log(dbZip + dbFile)
     createZipArchive(dbFile, dbDest)
 }else{
     writeLine("no need for another db backup: "  + todayDate())
