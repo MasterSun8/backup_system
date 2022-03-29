@@ -44,7 +44,7 @@ function todayDate(range='d', today='t'){
     return ''
 }
 
-async function createZipArchive(file) {
+function createZipArchive(file) {
     try {
         const zip = new AdmZip()
         zip.addLocalFolder(dest)
