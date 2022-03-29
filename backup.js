@@ -47,7 +47,7 @@ async function createZipArchive(file) {
         zip.addLocalFolder(dest)
         zip.writeZip(file)
         len = fs.readdirSync(dest).length
-        fs.writeFile('/var/log/kopiaZapasowa.txt', (`Created ${file}successfullywith ${len}files on${todayDate()}`), { flag: 'a+' }, err => {if(err != null){console.log(err)}})
+        fs.appendFile('/var/log/kopiaZapasowa.txt', (`Created ${file}successfullywith ${len}files on${todayDate()}`), { flag: 'a+' }, err => {if(err != null){console.log(err)}})
         console.log(`Created ${file}successfullywith ${len}files on${todayDate()}`)
     } catch (error) {
     }
@@ -84,13 +84,13 @@ const filterFuncDay = (source, destination) => {
 try{
     fs.copySync(etc, dest, { filter: filterFuncMonth})
 }catch (error) {
-    fs.writeFile('/var/log/kopiaZapasowa.txt', ("/n access to some files in etc denied" + todayDate()), { flag: 'a+' }, err => {if(err != null){console.log(err)}})
+    fs.appendFile('/var/log/kopiaZapasowa.txt', ("access to some files in etc denied" + todayDate()), { flag: 'a+' }, err => {if(err != null){console.log(err)}})
 }
 
 if(back.includes(etcFile)){
     createZipArchive(etcFile)}
 else{
-    fs.writeFile('/var/log/kopiaZapasowa.txt', ("/n no need for another etc backup" + todayDate()), { flag: 'a+' }, err => {if(err != null){console.log(err)}})
+    fs.appendFile('/var/log/kopiaZapasowa.txt', ("no need for another etc backup" + todayDate()), { flag: 'a+' }, err => {if(err != null){console.log(err)}})
 }
 
 let files = fs.readdirSync(dest)
@@ -102,13 +102,13 @@ files.forEach(x => {
 try{
     fs.copySync(home, dest, { filter: filterFuncWeek})
 }catch (error) {
-    fs.writeFile('/var/log/kopiaZapasowa.txt', ("/n access to some files in home denied" + todayDate()), { flag: 'a+' }, err => {if(err != null){console.log(err)}})
+    fs.appendFile('/var/log/kopiaZapasowa.txt', ("access to some files in home denied" + todayDate()), { flag: 'a+' }, err => {if(err != null){console.log(err)}})
 }
 
 if(back.includes(homeFile)){
     createZipArchive(homeFile)}
 else{
-    fs.writeFile('/var/log/kopiaZapasowa.txt', ("/n no need for another home backup" + todayDate()), { flag: 'a+' }, err => {if(err != null){console.log(err)}})
+    fs.appendFile('/var/log/kopiaZapasowa.txt', ("no need for another home backup" + todayDate()), { flag: 'a+' }, err => {if(err != null){console.log(err)}})
 }
 
 files = fs.readdirSync(dest)
@@ -120,13 +120,13 @@ files.forEach(x => {
 try{
     fs.copySync(db, dest, { filter: filterFuncDay})
 }catch (error) {
-    fs.writeFile('/var/log/kopiaZapasowa.txt', ("/n access to db denied" + todayDate()), { flag: 'a+' }, err => {if(err != null){console.log(err)}})
+    fs.appendFile('/var/log/kopiaZapasowa.txt', ("access to db denied" + todayDate()), { flag: 'a+' }, err => {if(err != null){console.log(err)}})
 }
 
 if(back.includes(dbFile)){
     createZipArchive(dbFile)
 }else{
-    fs.writeFile('/var/log/kopiaZapasowa.txt', ("/n no need for another db backup" + todayDate()), { flag: 'a+' }, err => {if(err != null){console.log(err)}})
+    fs.appendFile('/var/log/kopiaZapasowa.txt', ("no need for another db backup" + todayDate()), { flag: 'a+' }, err => {if(err != null){console.log(err)}})
 }
 
 files = fs.readdirSync(dest)
