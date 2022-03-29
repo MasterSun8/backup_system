@@ -14,9 +14,13 @@ const dbDest = dest + db
 var logger = fs.createWriteStream('/var/log/kopiaZapasowa.txt', {flags: 'a'})
 var writeLine = (line) => logger.write(`${line}\n`);
 
-const etcFile = backup + `/etc` + todayDate('m') + `.zip`
-const homeFile = backup + `/home` + todayDate('w') + `.zip`
-const dbFile = backup + `/db` + todayDate() + `.zip`
+const etcZip = `/etc` + todayDate('m') + `.zip`
+const homeZip = `/home` + todayDate('w') + `.zip`
+const dbZip = `/db` + todayDate() + `.zip`
+
+const etcFile = backup + etcZip
+const homeFile = backup + homeZip
+const dbFile = backup + dbZip
 
 let len = 0
 
@@ -92,11 +96,9 @@ try{
     writeLine("access to some files in etc denied: " + todayDate())
 }
 
-if(back.includes(etcFile)){
-    console.log(etcFile + back)
+if(back.includes(etcZip)){
     createZipArchive(etcFile, etcDest)
 }else{
-    console.log(dbFile + back)
     writeLine("no need for another etc backup: " + todayDate())
 }
 
@@ -106,11 +108,9 @@ try{
     writeLine("access to some files in home denied: "  + todayDate())
 }
 
-if(back.includes(homeFile)){
-    console.log(homeFile + back)
+if(back.includes(homeZip)){
     createZipArchive(homeFile, homeDest)
 }else{
-    console.log(dbFile + back)
     writeLine("no need for another home backup: "  + todayDate())
 }
 
@@ -120,9 +120,8 @@ try{
     writeLine("access to db denied: "  + todayDate())
 }
 
-if(back.includes(dbFile)){
+if(back.includes(dbZip)){
     createZipArchive(dbFile, dbDest)
 }else{
-    console.log(dbFile + back)
     writeLine("no need for another db backup: "  + todayDate())
 }
