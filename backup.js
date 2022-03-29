@@ -1,5 +1,5 @@
 const fs = require('fs-extra')
-const AdmZip = require('adm-zip')
+const child_process = require("child_process");
 
 const etc = `/etc`
 const home = `/home`
@@ -46,9 +46,9 @@ function todayDate(range='d', today='t'){
 
 function createZipArchive(file) {
     try {
-        const zip = new AdmZip()
-        zip.addLocalFolder(dest)
-        zip.writeZip(file)
+        child_process.execSync(`zip -r ${file} *`, {
+            cwd: dest
+        })
         len = fs.readdirSync(dest).length
         writeLine(`Created ${file} successfully with ${len} files on ${todayDate()}`)
     } catch (error) {
