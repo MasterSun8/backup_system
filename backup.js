@@ -52,6 +52,7 @@ async function createZipArchive(file) {
         len = fs.readdirSync(dest).length
         writeLine(`Created ${file} successfully with ${len} files on ${todayDate()}`)
     } catch (error) {
+        console.log(error)
     }
 }
 
@@ -89,15 +90,13 @@ try{
     writeLine("access to some files in etc denied: " + todayDate())
 }
 
-let files = fs.readdirSync(dest)
-
 if(!(back.includes(etcFile))){
-    console.log("debug")
     createZipArchive(etcFile)
-    console.log(files)
 }else{
     writeLine("no need for another etc backup: " + todayDate())
 }
+
+let files = fs.readdirSync(dest)
 
 files.forEach(x => {
     fs.removeSync(dest+'\\'+x)
@@ -109,15 +108,13 @@ try{
     writeLine("access to some files in home denied: "  + todayDate())
 }
 
-files = fs.readdirSync(dest)
-
 if(!(back.includes(homeFile))){
-    console.log("debug")
     createZipArchive(homeFile)
-    console.log(files)
 }else{
     writeLine("no need for another home backup: "  + todayDate())
 }
+
+files = fs.readdirSync(dest)
 
 files.forEach(x => {
     fs.removeSync(dest+'\\'+x)
@@ -129,15 +126,13 @@ try{
     writeLine("access to db denied: "  + todayDate())
 }
 
-files = fs.readdirSync(dest)
-
 if(!(back.includes(dbFile))){
-    console.log("debug")
     createZipArchive(dbFile)
-    console.log(files)
 }else{
     writeLine("no need for another db backup: "  + todayDate())
 }
+
+files = fs.readdirSync(dest)
 
 files.forEach(x => {
     fs.removeSync(dest+'\\'+x)
