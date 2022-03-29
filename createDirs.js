@@ -1,3 +1,6 @@
 const fs = require('fs-extra')
 fs.ensureDirSync(`/backup`)
-fs.ensureDirSync(`/var/log`)
+fs.ensureDirSync(`/tmp/tempbackup`)
+fs.ensureDirSync(`/tmp/tempbackup/etc`)
+fs.ensureDirSync(`/tmp/tempbackup/home`)
+fs.ensureDirSync(`/tmp/tempbackup/db`)

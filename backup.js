@@ -1,5 +1,5 @@
 const fs = require('fs-extra')
-const AdmZip = require("adm-zip")
+const child_process = require("child_process");
 
 const etc = `/etc`
 const home = `/home`
@@ -7,14 +7,24 @@ const db = `/db`
 
 const dest = `/tmp/tempbackup`
 const backup = `/backup`
+const etcDest = dest + etc
+const homeDest = dest + home
+const dbDest = dest + db
 
-const etcFile = backup + `/etc` + todayDate('m') + `.zip`
-const homeFile = backup + `/home` + todayDate('w') + `.zip`
-const dbFile = backup + `/db` + todayDate() + `.zip`
+var logger = fs.createWriteStream('/var/log/kopiaZapasowa.txt', {flags: 'a'})
+var writeLine = (line) => logger.write(`${line}\n`);
 
+const etcZip = `etc` + todayDate('m') + `.zip`
+const homeZip = `home` + todayDate('w') + `.zip`
+const dbZip = `db` + todayDate() + `.zip`
+
+const etcFile = backup + '/' + etcZip
+const homeFile = backup + '/' +  homeZip
+const dbFile = backup + '/' +  dbZip
+
+let len = 0
 
 let back = fs.readdirSync(backup)
-console.log(back)
 
 function getWeek(d) {
     d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()))
@@ -26,8 +36,6 @@ function getWeek(d) {
 
 function todayDate(range='d', today='t'){
     today = today == 't' ? new Date() : new Date(today)
-
-
 
     if(today instanceof Date){
         let y = today.getMonth() < 10 ? '-0' : '-'
@@ -41,28 +49,32 @@ function todayDate(range='d', today='t'){
     return ''
 }
 
-async function createZipArchive() {
+function createZipArchive(file, destination) {
     try {
-        const zip = new AdmZip()
-        zip.addLocalFolder(dest)
-        zip.writeZip(etcFile)
-        console.log(`Created ${etcFile} successfully`)
+        child_process.execSync(`zip -r ${file} *`, {
+            cwd: destination
+        })
+        len = fs.readdirSync(destination).length
+        child_process.execSync(`sudo rm -r ${destination}/*`)
+        writeLine(`Created ${file} successfully with ${len} files on ${todayDate()}`)
     } catch (error) {
-        //console.error(error)
+        writeLine(error)
     }
 }
 
 function isSameWeek(date){
     date = new Date(date)
-    return back.includes(`/etc` + todayDate('m', date) + `.zip`)
+    return !(back.includes(`/etc` + todayDate('m', date) + `.zip`))
 }
 
-function isSameDay(){
-
+function isSameDay(date){
+    date = new Date(date)
+    return !(back.includes(`/db` + todayDate('d', date) + `.zip`))
 }
 
-function isSameMonth(){
-
+function isSameMonth(date){
+    date = new Date(date)
+    return !(back.includes(`/home` + todayDate('w', date) + `.zip`))
 }
 
 const filterFuncMonth = (source, destination) => {
@@ -75,57 +87,41 @@ const filterFuncWeek = (source, destination) => {
 }
 const filterFuncDay = (source, destination) => {
     let y = fs.statSync((source))
-    return isSameDay(y.ctime, 'm')
+    return isSameDay(y.ctime)
 }
 
 try{
-    fs.copySync(etc, dest, { filter: filterFuncMonth})
+    fs.copySync(etc, etcDest, { filter: filterFuncMonth})
 }catch (error) {
-    //console.error(error)
+    writeLine("access to some files in etc denied: " + todayDate())
 }
 
-let sr = fs.readdirSync(etc)
-let files = fs.readdirSync(dest)
-
-console.log(files)
-
-if(!(back.includes(etcFile))){
-    createZipArchive()}
-else{
-    console.log("no need for another backup")
-}
-
-files.forEach(x => {
-    fs.removeSync(dest+'\\'+x)
-})
-/*
-try{
-    fs.copySync(home, dest, { filter: filterFuncWeek})
-}catch (error) {
-    //console.error(error)
-}
-
-if(!(back.includes(homeFile))){
-    createZipArchive()}
-else{
-    console.log("no need for another backup")
-}
-
-files.forEach(x => {
-    fs.removeSync(dest+'\\'+x)
-})
-
-try{
-    fs.copySync(db, dest, { filter: filterFuncDay})
-}catch (error) {
-    //console.error(error)
-}
-
-if(!(back.includes(dbFile))){createZipArchive()
+if(!(back.includes(etcZip))){
+    createZipArchive(etcFile, etcDest)
 }else{
-    console.log("no need for another backup")
+    writeLine("no need for another etc backup: " + todayDate())
 }
 
-files.forEach(x => {
-    fs.removeSync(dest+'\\'+x)
-})*/
+try{
+    fs.copySync(home, homeDest, { filter: filterFuncWeek})
+}catch (error) {
+    writeLine("access to some files in home denied: "  + todayDate())
+}
+
+if(!(back.includes(homeZip))){
+    createZipArchive(homeFile, homeDest)
+}else{
+    writeLine("no need for another home backup: "  + todayDate())
+}
+
+try{
+    fs.copySync(db, dbDest, { filter: filterFuncDay})
+}catch (error) {
+    writeLine("access to db denied: "  + todayDate())
+}
+
+if(!(back.includes(dbZip))){
+    createZipArchive(dbFile, dbDest)
+}else{
+    writeLine("no need for another db backup: "  + todayDate())
+}
