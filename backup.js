@@ -92,7 +92,7 @@ try{
     writeLine("access to some files in etc denied: " + todayDate())
 }
 
-if(!(back.includes(etcFile))){
+if(back.includes(etcFile)){
     createZipArchive(etcFile, etcDest)
 }else{
     writeLine("no need for another etc backup: " + todayDate())
@@ -104,7 +104,7 @@ try{
     writeLine("access to some files in home denied: "  + todayDate())
 }
 
-if(!(back.includes(homeFile))){
+if(back.includes(homeFile)){
     createZipArchive(homeFile, homeDest)
 }else{
     writeLine("no need for another home backup: "  + todayDate())
@@ -116,7 +116,7 @@ try{
     writeLine("access to db denied: "  + todayDate())
 }
 
-if(!(back.includes(dbFile))){
+if(back.includes(dbFile)){
     createZipArchive(dbFile, dbDest)
 }else{
     writeLine("no need for another db backup: "  + todayDate())
