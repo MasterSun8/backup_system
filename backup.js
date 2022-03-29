@@ -14,7 +14,6 @@ const dbFile = backup + `/db` + todayDate() + `.zip`
 
 
 let back = fs.readdirSync(backup)
-console.log(back)
 
 function getWeek(d) {
     d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()))
@@ -46,7 +45,7 @@ async function createZipArchive(file) {
         const zip = new AdmZip()
         zip.addLocalFolder(dest)
         zip.writeZip(file)
-        console.log(`Created ${file} successfully`)
+        fs.writeFile('/var/log/kopiaZapasowa', ("Created " + file + "successfully" + todayDate()), { flag: 'a+' }, err => {})
     } catch (error) {
     }
 }
@@ -82,17 +81,13 @@ const filterFuncDay = (source, destination) => {
 try{
     fs.copySync(etc, dest, { filter: filterFuncMonth})
 }catch (error) {
-    fs.writeFile('/var/log/kopiaZapasowa', ("access to some files in etc denied" + todayDate()), { flag: 'a+' }, err => {})
+    fs.writeFile('/var/log/kopiaZapasowa', ("/n access to some files in etc denied" + todayDate()), { flag: 'a+' }, err => {})
 }
-
-let files = fs.readdirSync(dest)
-
-console.log(files)
 
 if(back.includes(etcFile)){
     createZipArchive(etcFile)}
 else{
-    fs.writeFile('/var/log/kopiaZapasowa', ("no need for another etc backup" + todayDate()), { flag: 'a+' }, err => {})
+    fs.writeFile('/var/log/kopiaZapasowa', ("/n no need for another etc backup" + todayDate()), { flag: 'a+' }, err => {})
 }
 
 files.forEach(x => {
@@ -102,13 +97,13 @@ files.forEach(x => {
 try{
     fs.copySync(home, dest, { filter: filterFuncWeek})
 }catch (error) {
-    fs.writeFile('/var/log/kopiaZapasowa', ("access to some files in home denied" + todayDate()), { flag: 'a+' }, err => {})
+    fs.writeFile('/var/log/kopiaZapasowa', ("/n access to some files in home denied" + todayDate()), { flag: 'a+' }, err => {})
 }
 
 if(back.includes(homeFile)){
     createZipArchive(homeFile)}
 else{
-    fs.writeFile('/var/log/kopiaZapasowa', ("no need for another home backup" + todayDate()), { flag: 'a+' }, err => {})
+    fs.writeFile('/var/log/kopiaZapasowa', ("/n no need for another home backup" + todayDate()), { flag: 'a+' }, err => {})
 }
 
 files.forEach(x => {
@@ -118,13 +113,13 @@ files.forEach(x => {
 try{
     fs.copySync(db, dest, { filter: filterFuncDay})
 }catch (error) {
-    fs.writeFile('/var/log/kopiaZapasowa', ("acces to db denied" + todayDate()), { flag: 'a+' }, err => {})
+    fs.writeFile('/var/log/kopiaZapasowa', ("/n acces to db denied" + todayDate()), { flag: 'a+' }, err => {})
 }
 
 if(back.includes(dbFile)){
     createZipArchive(dbFile)
 }else{
-    fs.writeFile('/var/log/kopiaZapasowa', ("no need for another db backup" + todayDate()), { flag: 'a+' }, err => {})
+    fs.writeFile('/var/log/kopiaZapasowa', ("/n no need for another db backup" + todayDate()), { flag: 'a+' }, err => {})
 }
 
 files.forEach(x => {
