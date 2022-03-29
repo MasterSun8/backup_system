@@ -8,31 +8,34 @@ const db = `/db`
 const dest = `/tmp/tempbackup`
 const backup = `/backup`
 
-const today = new Date()
-
 const etcFile = backup + `/etc` + todayDate('m') + `.zip`
 const homeFile = backup + `/home` + todayDate('w') + `.zip`
 const dbFile = backup + `/db` + todayDate() + `.zip`
 
-function getWeek(date) {
-    var onejan = new Date(date.getFullYear(),0,1);
-    var millisecsInDay = 86400000;
-    return Math.ceil((((this - onejan) /millisecsInDay) + onejan.getDay()+1)/7);
-};
 
-function todayDate(range='d'){
-    let y = '-'
+let back = fs.readdirSync(backup)
+console.log(back)
+
+function getWeek(d) {
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()))
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7))
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1))
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7)
+    return weekNo+1
+}
+
+function todayDate(range='d', today='t'){
+    today = today == 't' ? new Date() : new Date(today)
+
+
+
     if(today instanceof Date){
-        if(today.getMonth() < 10) y += '0'
-        let x = today.getFullYear() + y + today.getMonth()
-        switch (range) {
-            case 'd':
-                x += '-' + today.getDate()
-                break
-            case 'w':
-                x += '-w' + getWeek(today)
-                break
-        }
+        let y = today.getMonth() < 10 ? '-0' : '-'
+
+        let x = today.getFullYear()
+
+        x += range == 'w' ? '-w' + getWeek(today) : range == 'd'  ? y + today.getMonth() + '-' + today.getDate() : y + today.getMonth()
+
         return x
     }
     return ''
@@ -49,31 +52,9 @@ async function createZipArchive() {
     }
 }
 
-function isTodayDate(date, range='d'){
-    let x = today
-    date = new Date(date)
-    if (date instanceof Date) {
-        if(x.getFullYear() > date.getFullYear()){
-            return false
-        }else if(x.getMonth() > date.getMonth()){
-            return false
-        }else if(x.getDate() > date.getDate()){
-            if(range!='d'){
-                return true
-            }else{
-                return false
-            }
-        }else{
-            return true
-        }
-    }else{
-        console.log('not a date')
-        return false
-    }
-}
-
 function isSameWeek(date){
     date = new Date(date)
+    return back.includes(`/etc` + todayDate('m', date) + `.zip`)
 }
 
 function isSameDay(){
@@ -84,15 +65,13 @@ function isSameMonth(){
 
 }
 
-let back = fs.readdirSync(backup)
-
 const filterFuncMonth = (source, destination) => {
     let y = fs.statSync((source))
-    return isSameMonth(y.ctime, 'm')
+    return isSameMonth(y.ctime)
 }
 const filterFuncWeek = (source, destination) => {
     let y = fs.statSync((source))
-    return isSameWeek(y.ctime, 'm')
+    return isSameWeek(y.ctime)
 }
 const filterFuncDay = (source, destination) => {
     let y = fs.statSync((source))
@@ -105,24 +84,10 @@ try{
     //console.error(error)
 }
 
-try{
-    fs.copySync(home, dest, { filter: filterFuncWeek})
-}catch (error) {
-    //console.error(error)
-}
-
-try{
-    fs.copySync(db, dest, { filter: filterFuncDay})
-}catch (error) {
-    //console.error(error)
-}
-
 let sr = fs.readdirSync(etc)
 let files = fs.readdirSync(dest)
 
-console.log(sr)
 console.log(files)
-console.log(back)
 
 if(!(back.includes(etcFile))){
     createZipArchive()}
@@ -130,10 +95,30 @@ else{
     console.log("no need for another backup")
 }
 
+files.forEach(x => {
+    fs.removeSync(dest+'\\'+x)
+})
+/*
+try{
+    fs.copySync(home, dest, { filter: filterFuncWeek})
+}catch (error) {
+    //console.error(error)
+}
+
 if(!(back.includes(homeFile))){
     createZipArchive()}
 else{
     console.log("no need for another backup")
+}
+
+files.forEach(x => {
+    fs.removeSync(dest+'\\'+x)
+})
+
+try{
+    fs.copySync(db, dest, { filter: filterFuncDay})
+}catch (error) {
+    //console.error(error)
 }
 
 if(!(back.includes(dbFile))){createZipArchive()
@@ -143,4 +128,4 @@ if(!(back.includes(dbFile))){createZipArchive()
 
 files.forEach(x => {
     fs.removeSync(dest+'\\'+x)
-})
+})*/
