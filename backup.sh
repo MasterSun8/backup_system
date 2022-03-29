@@ -1,3 +1,3 @@
 #!/bin/sh
 sudo node createDirs.js
-node backup.js
+sudo node backup.js
