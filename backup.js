@@ -99,7 +99,11 @@ if(!(back.includes(etcFile))){
 let files = fs.readdirSync(dest)
 
 files.forEach(x => {
-    fs.removeSync(dest+'\\'+x)
+    try{
+        fs.removeSync(dest+'\\'+x)
+    }catch(error){
+        console.log(error)
+    }
 })
 
 try{
@@ -117,7 +121,11 @@ if(!(back.includes(homeFile))){
 files = fs.readdirSync(dest)
 
 files.forEach(x => {
-    fs.removeSync(dest+'\\'+x)
+    try{
+        fs.removeSync(dest+'\\'+x)
+    }catch(error){
+        console.log(error)
+    }
 })
 
 try{
@@ -135,5 +143,9 @@ if(!(back.includes(dbFile))){
 files = fs.readdirSync(dest)
 
 files.forEach(x => {
-    fs.removeSync(dest+'\\'+x)
+    try{
+        fs.removeSync(dest+'\\'+x)
+    }catch(error){
+        console.log(error)
+    }
 })
