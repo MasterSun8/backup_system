@@ -57,8 +57,9 @@ function isSameWeek(date){
     return back.includes(`/etc` + todayDate('m', date) + `.zip`)
 }
 
-function isSameDay(){
-
+function isSameDay(date){
+    date = new Date(date)
+    return back.includes(`/db` + todayDate('m', date) + `.zip`)
 }
 
 function isSameMonth(){
@@ -89,7 +90,7 @@ let files = fs.readdirSync(dest)
 
 console.log(files)
 
-if(!(back.includes(etcFile))){
+if(back.includes(etcFile)){
     createZipArchive(etcFile)}
 else{
     console.log("no need for another backup")
@@ -105,7 +106,7 @@ try{
     //console.error(error)
 }
 
-if(!(back.includes(homeFile))){
+if(back.includes(homeFile)){
     createZipArchive(homeFile)}
 else{
     console.log("no need for another backup")
@@ -121,7 +122,7 @@ try{
     //console.error(error)
 }
 
-if(!(back.includes(dbFile))){
+if(back.includes(dbFile)){
     createZipArchive(dbFile)
 }else{
     console.log("no need for another backup")
