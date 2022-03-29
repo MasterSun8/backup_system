@@ -98,7 +98,7 @@ else{
 files.forEach(x => {
     fs.removeSync(dest+'\\'+x)
 })
-/*
+
 try{
     fs.copySync(home, dest, { filter: filterFuncWeek})
 }catch (error) {
@@ -128,4 +128,4 @@ if(!(back.includes(dbFile))){createZipArchive()
 
 files.forEach(x => {
     fs.removeSync(dest+'\\'+x)
-})*/
+})
