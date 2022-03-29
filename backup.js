@@ -51,6 +51,7 @@ function createZipArchive(file, destination) {
             cwd: destination
         })
         len = fs.readdirSync(destination).length
+        child_process.execSync(`sudo rm -r ${destination}/*`)
         writeLine(`Created ${file} successfully with ${len} files on ${todayDate()}`)
     } catch (error) {
         writeLine(error)
@@ -97,16 +98,6 @@ if(!(back.includes(etcFile))){
     writeLine("no need for another etc backup: " + todayDate())
 }
 
-let files = fs.readdirSync(dest)
-
-files.forEach(x => {
-    try{
-        fs.removeSync(dest+'\\'+x)
-    }catch(error){
-        writeLine(error)
-    }
-})
-
 try{
     fs.copySync(home, homeDest, { filter: filterFuncWeek})
 }catch (error) {
@@ -119,16 +110,6 @@ if(!(back.includes(homeFile))){
     writeLine("no need for another home backup: "  + todayDate())
 }
 
-files = fs.readdirSync(dest)
-
-files.forEach(x => {
-    try{
-        fs.removeSync(dest+'\\'+x)
-    }catch(error){
-        writeLine(error)
-    }
-})
-
 try{
     fs.copySync(db, dbDest, { filter: filterFuncDay})
 }catch (error) {
@@ -140,13 +121,3 @@ if(!(back.includes(dbFile))){
 }else{
     writeLine("no need for another db backup: "  + todayDate())
 }
-
-files = fs.readdirSync(dest)
-
-files.forEach(x => {
-    try{
-        fs.removeSync(dest+'\\'+x)
-    }catch(error){
-        writeLine(error)
-    }
-})
