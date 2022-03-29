@@ -90,8 +90,9 @@ try{
 }
 
 if(!(back.includes(etcFile))){
-    createZipArchive(etcFile)}
-else{
+    console.log("debug")
+    createZipArchive(etcFile)
+}else{
     writeLine("no need for another etc backup: " + todayDate())
 }
 
@@ -108,8 +109,9 @@ try{
 }
 
 if(!(back.includes(homeFile))){
-    createZipArchive(homeFile)}
-else{
+    console.log("debug")
+    createZipArchive(homeFile)
+}else{
     writeLine("no need for another home backup: "  + todayDate())
 }
 
@@ -126,6 +128,7 @@ try{
 }
 
 if(!(back.includes(dbFile))){
+    console.log("debug")
     createZipArchive(dbFile)
 }else{
     writeLine("no need for another db backup: "  + todayDate())
