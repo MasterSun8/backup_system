@@ -25,7 +25,6 @@ const dbFile = backup + '/' +  dbZip
 let len = 0
 
 let back = fs.readdirSync(backup)
-console.table(back)
 
 function getWeek(d) {
     d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()))
