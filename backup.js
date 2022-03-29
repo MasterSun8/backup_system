@@ -30,8 +30,6 @@ function getWeek(d) {
 function todayDate(range='d', today='t'){
     today = today == 't' ? new Date() : new Date(today)
 
-
-
     if(today instanceof Date){
         let y = today.getMonth() < 10 ? '-0' : '-'
 
@@ -52,7 +50,7 @@ function createZipArchive(file) {
         len = fs.readdirSync(dest).length
         writeLine(`Created ${file} successfully with ${len} files on ${todayDate()}`)
     } catch (error) {
-        console.log(error)
+        writeLine(error)
     }
 }
 
@@ -90,7 +88,7 @@ try{
     writeLine("access to some files in etc denied: " + todayDate())
 }
 
-if(back.includes(etcFile)){
+if(!(back.includes(etcFile))){
     createZipArchive(etcFile)
 }else{
     writeLine("no need for another etc backup: " + todayDate())
@@ -102,7 +100,7 @@ files.forEach(x => {
     try{
         fs.removeSync(dest+'\\'+x)
     }catch(error){
-        console.log(error)
+        writeLine(error)
     }
 })
 
@@ -112,7 +110,7 @@ try{
     writeLine("access to some files in home denied: "  + todayDate())
 }
 
-if(back.includes(homeFile)){
+if(!(back.includes(homeFile))){
     createZipArchive(homeFile)
 }else{
     writeLine("no need for another home backup: "  + todayDate())
@@ -124,7 +122,7 @@ files.forEach(x => {
     try{
         fs.removeSync(dest+'\\'+x)
     }catch(error){
-        console.log(error)
+        writeLine(error)
     }
 })
 
@@ -134,7 +132,7 @@ try{
     writeLine("access to db denied: "  + todayDate())
 }
 
-if(back.includes(dbFile)){
+if(!(back.includes(dbFile))){
     createZipArchive(dbFile)
 }else{
     writeLine("no need for another db backup: "  + todayDate())
@@ -146,6 +144,6 @@ files.forEach(x => {
     try{
         fs.removeSync(dest+'\\'+x)
     }catch(error){
-        console.log(error)
+        writeLine(error)
     }
 })
