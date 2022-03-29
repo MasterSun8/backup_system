@@ -57,17 +57,17 @@ async function createZipArchive(file) {
 
 function isSameWeek(date){
     date = new Date(date)
-    return back.includes(`/etc` + todayDate('m', date) + `.zip`)
+    return !(back.includes(`/etc` + todayDate('m', date) + `.zip`))
 }
 
 function isSameDay(date){
     date = new Date(date)
-    return back.includes(`/db` + todayDate('d', date) + `.zip`)
+    return !(back.includes(`/db` + todayDate('d', date) + `.zip`))
 }
 
 function isSameMonth(date){
     date = new Date(date)
-    return back.includes(`/home` + todayDate('w', date) + `.zip`)
+    return !(back.includes(`/home` + todayDate('w', date) + `.zip`))
 }
 
 const filterFuncMonth = (source, destination) => {
