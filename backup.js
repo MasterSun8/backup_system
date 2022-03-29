@@ -98,7 +98,8 @@ try{
 }
 
 if(!(back.includes(etcZip))){
-    console.log(etcZip + etcFile)
+    console.log(etcZip)
+    console.log(back.includes(etcZip))
     createZipArchive(etcFile, etcDest)
 }else{
     writeLine("no need for another etc backup: " + todayDate())
@@ -111,7 +112,8 @@ try{
 }
 
 if(!(back.includes(homeZip))){
-    console.log(homeZip + homeFile)
+    console.log(homeZip)
+    console.log(back.includes(homeZip))
     createZipArchive(homeFile, homeDest)
 }else{
     writeLine("no need for another home backup: "  + todayDate())
@@ -124,7 +126,8 @@ try{
 }
 
 if(!(back.includes(dbZip))){
-    console.log(dbZip + dbFile)
+    console.log(dbZip)
+    console.log(back.includes(dbZip))
     createZipArchive(dbFile, dbDest)
 }else{
     writeLine("no need for another db backup: "  + todayDate())
