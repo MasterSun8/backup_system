@@ -7,6 +7,9 @@ const db = `/db`
 
 const dest = `/tmp/tempbackup`
 const backup = `/backup`
+const etcDest = dest + etc
+const homeDest = dest + home
+const dbDest = dest + db
 
 var logger = fs.createWriteStream('/var/log/kopiaZapasowa.txt', {flags: 'a'})
 var writeLine = (line) => logger.write(`${line}\n`);
@@ -42,10 +45,10 @@ function todayDate(range='d', today='t'){
     return ''
 }
 
-function createZipArchive(file) {
+function createZipArchive(file, destination) {
     try {
         child_process.execSync(`zip -r ${file} *`, {
-            cwd: dest
+            cwd: destination
         })
         len = fs.readdirSync(dest).length
         writeLine(`Created ${file} successfully with ${len} files on ${todayDate()}`)
@@ -89,7 +92,7 @@ try{
 }
 
 if(!(back.includes(etcFile))){
-    createZipArchive(etcFile)
+    createZipArchive(etcFile, etcDest)
 }else{
     writeLine("no need for another etc backup: " + todayDate())
 }
@@ -111,7 +114,7 @@ try{
 }
 
 if(!(back.includes(homeFile))){
-    createZipArchive(homeFile)
+    createZipArchive(homeFile, homeDest)
 }else{
     writeLine("no need for another home backup: "  + todayDate())
 }
@@ -133,7 +136,7 @@ try{
 }
 
 if(!(back.includes(dbFile))){
-    createZipArchive(dbFile)
+    createZipArchive(dbFile, dbDest)
 }else{
     writeLine("no need for another db backup: "  + todayDate())
 }
