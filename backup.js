@@ -97,7 +97,7 @@ try{
     writeLine("access to some files in etc denied: " + todayDate())
 }
 
-if(back.includes(etcZip)){
+if(!(back.includes(etcZip))){
     console.log(etcZip + etcFile)
     createZipArchive(etcFile, etcDest)
 }else{
@@ -110,7 +110,7 @@ try{
     writeLine("access to some files in home denied: "  + todayDate())
 }
 
-if(back.includes(homeZip)){
+if(!(back.includes(homeZip))){
     console.log(homeZip + homeFile)
     createZipArchive(homeFile, homeDest)
 }else{
@@ -123,7 +123,7 @@ try{
     writeLine("access to db denied: "  + todayDate())
 }
 
-if(back.includes(dbZip)){
+if(!(back.includes(dbZip))){
     console.log(dbZip + dbFile)
     createZipArchive(dbFile, dbDest)
 }else{
