@@ -12,6 +12,7 @@ const etcFile = backup + `/etc` + todayDate('m') + `.zip`
 const homeFile = backup + `/home` + todayDate('w') + `.zip`
 const dbFile = backup + `/db` + todayDate() + `.zip`
 
+let len = 0
 
 let back = fs.readdirSync(backup)
 
@@ -45,7 +46,8 @@ async function createZipArchive(file) {
         const zip = new AdmZip()
         zip.addLocalFolder(dest)
         zip.writeZip(file)
-        fs.writeFile('/var/log/kopiaZapasowa', ("Created " + file + "successfully" + todayDate()), { flag: 'a+' }, err => {})
+        len = fs.readdirSync(dest).length
+        fs.writeFile('/var/log/kopiaZapasowa', (`Created ${file}successfullywith ${len}files on${todayDate()}`), { flag: 'a+' }, err => {})
     } catch (error) {
     }
 }
@@ -90,6 +92,8 @@ else{
     fs.writeFile('/var/log/kopiaZapasowa', ("/n no need for another etc backup" + todayDate()), { flag: 'a+' }, err => {})
 }
 
+let files = fs.readdirSync(dest)
+
 files.forEach(x => {
     fs.removeSync(dest+'\\'+x)
 })
@@ -106,6 +110,8 @@ else{
     fs.writeFile('/var/log/kopiaZapasowa', ("/n no need for another home backup" + todayDate()), { flag: 'a+' }, err => {})
 }
 
+files = fs.readdirSync(dest)
+
 files.forEach(x => {
     fs.removeSync(dest+'\\'+x)
 })
@@ -121,6 +127,8 @@ if(back.includes(dbFile)){
 }else{
     fs.writeFile('/var/log/kopiaZapasowa', ("/n no need for another db backup" + todayDate()), { flag: 'a+' }, err => {})
 }
+
+files = fs.readdirSync(dest)
 
 files.forEach(x => {
     fs.removeSync(dest+'\\'+x)
