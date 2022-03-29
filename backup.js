@@ -47,7 +47,7 @@ async function createZipArchive(file) {
         zip.addLocalFolder(dest)
         zip.writeZip(file)
         len = fs.readdirSync(dest).length
-        fs.writeFile('/var/log/kopiaZapasowa.txt', (`Created ${file}successfullywith ${len}files on${todayDate()}`), { flag: 'a+' }, err => {console.log(err)})
+        fs.writeFile('/var/log/kopiaZapasowa.txt', (`Created ${file}successfullywith ${len}files on${todayDate()}`), { flag: 'a+' }, err => {if(err != null){console.log(err)}})
         console.log(`Created ${file}successfullywith ${len}files on${todayDate()}`)
     } catch (error) {
     }
