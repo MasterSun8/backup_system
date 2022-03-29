@@ -119,7 +119,7 @@ files.forEach(x => {
 try{
     fs.copySync(db, dest, { filter: filterFuncDay})
 }catch (error) {
-    fs.writeFile('/var/log/kopiaZapasowa.txt', ("/n acces to db denied" + todayDate()), { flag: 'a+' }, err => {})
+    fs.writeFile('/var/log/kopiaZapasowa.txt', ("/n access to db denied" + todayDate()), { flag: 'a+' }, err => {})
 }
 
 if(back.includes(dbFile)){
