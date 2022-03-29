@@ -41,12 +41,12 @@ function todayDate(range='d', today='t'){
     return ''
 }
 
-async function createZipArchive() {
+async function createZipArchive(file) {
     try {
         const zip = new AdmZip()
         zip.addLocalFolder(dest)
-        zip.writeZip(etcFile)
-        console.log(`Created ${etcFile} successfully`)
+        zip.writeZip(file)
+        console.log(`Created ${file} successfully`)
     } catch (error) {
         //console.error(error)
     }
@@ -90,7 +90,7 @@ let files = fs.readdirSync(dest)
 console.log(files)
 
 if(!(back.includes(etcFile))){
-    createZipArchive()}
+    createZipArchive(etcFile)}
 else{
     console.log("no need for another backup")
 }
@@ -106,7 +106,7 @@ try{
 }
 
 if(!(back.includes(homeFile))){
-    createZipArchive()}
+    createZipArchive(homeFile)}
 else{
     console.log("no need for another backup")
 }
@@ -121,7 +121,8 @@ try{
     //console.error(error)
 }
 
-if(!(back.includes(dbFile))){createZipArchive()
+if(!(back.includes(dbFile))){
+    createZipArchive(dbFile)
 }else{
     console.log("no need for another backup")
 }
